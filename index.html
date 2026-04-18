@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResumeForge – Free Resume Builder</title>
+  <meta name="description" content="Build a professional, ATS-friendly resume for free. Live preview, multiple templates, and instant PDF download – no login required." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <!-- ========== TOP NAV ========== -->
+  <header class="app-header" id="app-header">
+    <div class="header-left">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="8" fill="url(#lgrd)"/>
+          <path d="M8 8h10v2H8zM8 12h16v2H8zM8 16h14v2H8zM8 20h10v2H8z" fill="white"/>
+          <defs><linearGradient id="lgrd" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+        </svg>
+        <span class="logo-text">ResumeForge</span>
+      </div>
+    </div>
+    <div class="header-center">
+      <div class="template-switcher" id="template-switcher">
+        <span class="switcher-label">Template:</span>
+        <button class="tpl-btn active" data-template="minimal"   id="tpl-minimal">Minimal</button>
+        <button class="tpl-btn"        data-template="classic"   id="tpl-classic">Classic</button>
+        <button class="tpl-btn"        data-template="modern"    id="tpl-modern">Modern</button>
+        <button class="tpl-btn"        data-template="executive" id="tpl-executive">Executive</button>
+        <button class="tpl-btn"        data-template="creative"  id="tpl-creative">Creative</button>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn" id="theme-toggle" title="Toggle dark/light mode" aria-label="Toggle dark/light mode">
+        <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="pdf-btn" id="download-pdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- ========== MAIN LAYOUT ========== -->
+  <main class="app-main" id="app-main">
+
+    <!-- ===== FORM PANEL ===== -->
+    <aside class="form-panel" id="form-panel">
+      <div class="form-scroll">
+
+        <!-- Personal Info -->
+        <section class="form-section" id="sec-personal">
+          <div class="section-header">
+            <div class="section-icon personal-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <h2 class="section-title">Personal Details</h2>
+          </div>
+
+          <!-- Photo Upload -->
+          <div class="photo-upload-row">
+            <div class="photo-upload-zone" id="photo-upload-zone" title="Click to upload photo">
+              <div class="photo-preview-wrap" id="photo-preview-wrap">
+                <img id="photo-preview-img" src="" alt="Profile photo" style="display:none" />
+                <div class="photo-placeholder" id="photo-placeholder">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>Upload Photo</span>
+                </div>
+              </div>
+              <input type="file" id="photo-input" accept="image/*" style="display:none" aria-label="Upload profile photo" />
+            </div>
+            <div class="photo-upload-info">
+              <p class="photo-hint-title">Profile Photo <span class="photo-optional">(Optional)</span></p>
+              <p class="photo-hint-body">JPG, PNG or WebP. Max 5 MB.<br/>Appears in the resume header.</p>
+              <div class="photo-actions" id="photo-actions" style="display:none">
+                <button class="photo-change-btn" id="photo-change-btn" type="button">Change photo</button>
+                <button class="photo-remove-btn" id="photo-remove-btn" type="button">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="fullName">Full Name</label>
+              <input type="text" id="fullName" placeholder="e.g. Alex Johnson" autocomplete="name" />
+            </div>
+            <div class="form-group full-width">
+              <label for="jobTitle">Job Title / Role</label>
+              <input type="text" id="jobTitle" placeholder="e.g. Senior Software Engineer" />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" placeholder="alex@example.com" autocomplete="email" />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" placeholder="+1 (555) 000-0000" autocomplete="tel" />
+            </div>
+            <div class="form-group">
+              <label for="location">Location</label>
+              <input type="text" id="location" placeholder="New York, NY" />
+            </div>
+            <div class="form-group">
+              <label for="website">LinkedIn / Website</label>
+              <input type="url" id="website" placeholder="linkedin.com/in/alexjohnson" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Profile Summary -->
+        <section class="form-section" id="sec-summary">
+          <div class="section-header">
+            <div class="section-icon summary-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
+            <h2 class="section-title">Profile Summary</h2>
+          </div>
+          <div class="form-group full-width">
+            <label for="summary">Summary</label>
+            <textarea id="summary" rows="4" placeholder="Write a brief professional summary highlighting your key strengths and career goals..."></textarea>
+          </div>
+        </section>
+
+        <!-- Skills -->
+        <section class="form-section" id="sec-skills">
+          <div class="section-header">
+            <div class="section-icon skills-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <h2 class="section-title">Skills</h2>
+          </div>
+          <div class="form-group full-width">
+            <label for="skills-input">Skills <span class="hint">Press Enter or comma to add</span></label>
+            <div class="tag-input-wrapper" id="skills-tag-wrapper">
+              <div class="tags-container" id="skills-tags"></div>
+              <input type="text" id="skills-input" placeholder="e.g. JavaScript, React, Node.js..." />
+            </div>
+          </div>
+        </section>
+
+        <!-- Experience -->
+        <section class="form-section" id="sec-experience">
+          <div class="section-header">
+            <div class="section-icon exp-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            </div>
+            <h2 class="section-title">Work Experience</h2>
+            <button class="add-btn" id="add-experience" type="button">+ Add</button>
+          </div>
+          <div id="experience-list" class="dynamic-list"></div>
+        </section>
+
+        <!-- Education -->
+        <section class="form-section" id="sec-education">
+          <div class="section-header">
+            <div class="section-icon edu-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <h2 class="section-title">Education</h2>
+            <button class="add-btn" id="add-education" type="button">+ Add</button>
+          </div>
+          <div id="education-list" class="dynamic-list"></div>
+        </section>
+
+        <!-- Projects -->
+        <section class="form-section" id="sec-projects">
+          <div class="section-header">
+            <div class="section-icon proj-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <h2 class="section-title">Projects</h2>
+            <button class="add-btn" id="add-project" type="button">+ Add</button>
+          </div>
+          <div id="project-list" class="dynamic-list"></div>
+        </section>
+
+        <!-- Clear Data -->
+        <div class="form-footer">
+          <button class="clear-btn" id="clear-data" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6L18.11 19.11A2 2 0 01 16.12 21H7.88A2 2 0 015.89 19.11L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+            Clear All Data
+          </button>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- ===== PREVIEW PANEL ===== -->
+    <section class="preview-panel" id="preview-panel">
+      <div class="preview-scroll">
+        <div class="preview-wrapper">
+          <div class="resume-paper" id="resume-preview">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== TOAST ========== -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script src="js/data.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/pdf.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
